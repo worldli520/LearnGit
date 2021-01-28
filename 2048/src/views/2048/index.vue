@@ -27,6 +27,7 @@ interface Cell {
 	x: number
 	y: number
 	color: string
+	canMove?: boolean
 }
 
 export default defineComponent({
@@ -78,10 +79,48 @@ export default defineComponent({
 		const getCellByXY = (x: number, y: number) => {
 			return data.value.filter((cell) => cell).find((cell) => cell.x === x && cell.y === y)
 		}
+		//处理移动事件
+		const turn = (direction: string) => {
+			console.log(direction)
+			//给每一个cell的canMove设定为true
+			data.value.forEach((e) => e && (e.canMove = true))
+			console.log(data.value)
+			if (direction === 'left') {
+				data.value.forEach((e) => {
+					if (e.x === 0) {
+						e.canMove = false
+					} else {
+						e.canMove = true
+					}
+				})
+			}
+		}
+
 		//页面挂载元素后新增两个数字
 		onMounted(() => {
 			addCell()
 			addCell()
+
+			document.addEventListener('keydown', (e) => {
+				switch (e.key.toLocaleUpperCase()) {
+					case 'ARROWRIGHT':
+					case 'D':
+						turn('right')
+						break
+					case 'ARROWLEFT':
+					case 'A':
+						turn('left')
+						break
+					case 'ARROWDOWN':
+					case 'S':
+						turn('down')
+						break
+					case 'ARROWUP':
+					case 'W':
+						turn('up')
+						break
+				}
+			})
 		})
 		return {
 			data,
@@ -105,6 +144,7 @@ export default defineComponent({
 			line-height: 80px;
 			text-align: center;
 			position: absolute;
+			border-radius: 3px;
 		}
 	}
 	.background {
