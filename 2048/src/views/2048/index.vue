@@ -69,7 +69,7 @@ export default defineComponent({
 		}
 		//随机2/4
 		const randomNum = () => {
-			return Math.random() > 0.7 ? 4 : 2
+			return Math.random() > 0.9 ? 4 : 2
 		}
 		//随机位置0123
 		const randomXY = () => {
@@ -81,18 +81,15 @@ export default defineComponent({
 		}
 		//处理移动事件
 		const turn = (direction: string) => {
-			console.log(direction)
 			//给每一个cell的canMove设定为true
 			data.value.forEach((e) => e && (e.canMove = true))
-			console.log(data.value)
+			//左移事件
 			if (direction === 'left') {
-				data.value.forEach((e) => {
-					if (e.x === 0) {
-						e.canMove = false
-					} else {
-						e.canMove = true
+				for (let i = 0; i < 4; i++) {
+					for (let j = 0; j < 4; j++) {
+						console.log(i, j)
 					}
-				})
+				}
 			}
 		}
 

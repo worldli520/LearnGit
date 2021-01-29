@@ -282,6 +282,15 @@ export default {
 						return flag
 					})
 			).then((res) => {
+				console.log(
+					this.handleDirect(direct)
+						.handleArr(this.rocks)
+						.filter((rock) => rock)
+						.map(async (e) => {
+							var flag = this.calcAxis({ e, direct })
+							return flag
+						})
+				)
 				if (res.indexOf(true) > -1) {
 					if (this.isSuccess()) {
 						this.$message.success('你真牛逼，你赢了，我服了')
