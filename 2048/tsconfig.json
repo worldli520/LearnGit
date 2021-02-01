@@ -14,6 +14,7 @@
 		"baseUrl": ".",
 		"types": ["webpack-env"],
 		"typeRoots": ["./types", "./node_modules/vue/types"],
+		"suppressImplicitAnyIndexErrors": true, //解决对象索引类型any报错
 		"paths": {
 			"@/*": ["src/*"]
 		},

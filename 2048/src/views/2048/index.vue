@@ -30,6 +30,17 @@ interface Cell {
 	canMove?: boolean
 }
 
+//矢量数据结构
+interface Vector {
+	x: 0 | 1 | -1
+	y: 0 | 1 | -1
+}
+//罗盘数据结构
+interface XY {
+	x: Array<number>
+	y: Array<number>
+}
+
 export default defineComponent({
 	setup() {
 		const color = {
@@ -47,7 +58,15 @@ export default defineComponent({
 			4096: '#280b21',
 			8192: '#281d04',
 		}
-
+		//键盘事件字典
+		const mapDirection = { 38: 0, 39: 1, 40: 2, 37: 3, 87: 0, 68: 1, 83: 2, 65: 3 }
+		//矢量方向字典
+		const mapVector = {
+			0: { x: 0, y: -1 },
+			1: { x: 1, y: 0 },
+			2: { x: 0, y: 1 },
+			3: { x: -1, y: 0 },
+		}
 		const data = ref<Cell[]>([])
 		//新增一个cell
 		const addCell = () => {
@@ -58,9 +77,7 @@ export default defineComponent({
 				y: randomXY(),
 				color: color[num],
 			}
-			// console.log(cell)
-			const _isExist = getCellByXY(cell.x, cell.y)
-			// console.log(_isExist)
+			const _isExist = getCellByXY(cell)
 			if (_isExist) {
 				addCell()
 			} else {
@@ -76,21 +93,39 @@ export default defineComponent({
 			return ~~(Math.random() * 4)
 		}
 		//验证新增位置是否已存在
-		const getCellByXY = (x: number, y: number) => {
-			return data.value.filter((cell) => cell).find((cell) => cell.x === x && cell.y === y)
+		const getCellByXY = (pos: { x: number; y: number }) => {
+			return data.value.filter((cell) => cell).find((cell) => cell.x === pos.x && cell.y === pos.y)
 		}
+
+		//创建遍历罗盘
+		const buildTraversals = (vector: Vector) => {
+			const traversals: XY = { x: [], y: [] }
+			for (let pos = 0; pos < 4; pos++) {
+				traversals.x.push(pos)
+				traversals.y.push(pos)
+			}
+			if (vector.x === 1) traversals.x = traversals.x.reverse()
+			if (vector.y === 1) traversals.y = traversals.y.reverse()
+			return traversals
+		}
+
 		//处理移动事件
-		const turn = (direction: string) => {
+		const turn = (direction: number) => {
 			//给每一个cell的canMove设定为true
 			data.value.forEach((e) => e && (e.canMove = true))
-			//左移事件
-			if (direction === 'left') {
-				for (let i = 0; i < 4; i++) {
-					for (let j = 0; j < 4; j++) {
-						console.log(i, j)
-					}
-				}
-			}
+			// console.log(direction)
+
+			//获取矢量方向
+			const vector: Vector = mapVector[direction]
+			console.log(vector)
+			//生成当前矢量方向的罗盘（罗盘遍历的第一个元素为移动方向最角上格子）
+			const traversals = buildTraversals(vector)
+			console.log(traversals)
+			traversals.x.forEach((x) => {
+				traversals.y.forEach((y) => {
+					console.log(x, y)
+				})
+			})
 		}
 
 		//页面挂载元素后新增两个数字
@@ -98,25 +133,10 @@ export default defineComponent({
 			addCell()
 			addCell()
 
+			//键盘事件监听
 			document.addEventListener('keydown', (e) => {
-				switch (e.key.toLocaleUpperCase()) {
-					case 'ARROWRIGHT':
-					case 'D':
-						turn('right')
-						break
-					case 'ARROWLEFT':
-					case 'A':
-						turn('left')
-						break
-					case 'ARROWDOWN':
-					case 'S':
-						turn('down')
-						break
-					case 'ARROWUP':
-					case 'W':
-						turn('up')
-						break
-				}
+				const maped = e.keyCode
+				turn(mapDirection[maped])
 			})
 		})
 		return {
