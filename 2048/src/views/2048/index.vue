@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="cellBox">
 			<div
-				class="cell"
+				class="cell animate__bounceIn animate__pulse"
 				v-for="cell in data"
 				:key="cell.id"
 				:class="'x' + cell.x + 'y' + cell.y"
@@ -143,7 +143,7 @@ export default defineComponent({
 							//聚合Cell
 							const nextIndex = data.value.findIndex((cell) => cell.x === next.x && cell.y === next.y)
 							const positionIndex = data.value.findIndex((cell) => cell.x === _isExist.x && cell.y === _isExist.y)
-							console.log(nextIndex, positionIndex)
+
 							data.value[nextIndex].num = data.value[nextIndex].num * 2
 							data.value[nextIndex].canMove = false
 							data.value.splice(positionIndex, 1)
@@ -227,8 +227,10 @@ export default defineComponent({
 			text-align: center;
 			position: absolute;
 			border-radius: 3px;
-			font-size: 55px;
+			font-size: 40px;
 			font-weight: 700;
+			transition: all 0.3s linear;
+			// animation: scaleCell 0.2s;
 		}
 	}
 	.background {
@@ -255,6 +257,20 @@ export default defineComponent({
 				top: #{16 + $j * 96}px;
 				left: #{16 + $i * 96}px;
 			}
+		}
+	}
+	@keyframes scaleCell {
+		0% {
+			scale: 1;
+		}
+		33% {
+			scale: 1.1;
+		}
+		66% {
+			scale: 0.9;
+		}
+		100% {
+			scale: 1;
 		}
 	}
 }

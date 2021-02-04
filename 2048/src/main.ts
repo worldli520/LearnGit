@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import usePlugins from '@/plugins';
+import 'animate.css'
 // import router from './router'
 // import store from './store'
 
