@@ -261,16 +261,16 @@ export default defineComponent({
 	}
 	@keyframes scaleCell {
 		0% {
-			scale: 1;
+			transform: scale(1);
 		}
 		33% {
-			scale: 1.1;
+			transform: scale(0.9);
 		}
 		66% {
-			scale: 0.9;
+			transform: scale(1.1);
 		}
 		100% {
-			scale: 1;
+			transform: scale(1);
 		}
 	}
 }
